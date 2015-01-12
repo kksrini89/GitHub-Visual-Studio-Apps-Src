@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Test ID="1">
+    <Name>Blood</Name>
+    <Price>100.25</Price>
+  </Test>
+  <Test ID="2">
+    <Name>Urine</Name>
+    <Price>500.45</Price>
+  </Test>
+  <Test ID="3">
+    <Name>Neuro</Name>
+    <Price>1000.23</Price>
+  </Test>
+  <Test ID="4">
+    <Name>Bone</Name>
+    <Price>2500.25</Price>
+  </Test>
+  <Test ID="5">
+    <Name>Neuron</Name>
+    <Price>1000.5</Price>
+  </Test>
+</ArrayOfTest>
