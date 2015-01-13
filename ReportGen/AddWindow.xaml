@@ -5,7 +5,7 @@
         Title="AddWindow" Height="220" Width="350">
     <Window.Resources>
         <Style x:Key="HospitalVisibilityStyle" TargetType="{x:Type Grid}">
-            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="Visibility" Value="Visible"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SetHospitalVisibility}" Value="True">
                     <Setter Property="Visibility" Value="Visible"/>
@@ -31,11 +31,13 @@
             </Grid.RowDefinitions>
             <Grid>
                 <TextBlock Text="Name" Height="25" Width="50" Margin="21,23,221,12"/>
-                <TextBox x:Name="NameTxt" Height="30" Width="200" Margin="76,18,16,12"/>
+                <TextBox x:Name="NameTxt" Height="25" Width="175" Margin="50,18,16,12"/>
             </Grid>
             <Grid Grid.Row="1" Style="{StaticResource HospitalVisibilityStyle}">
                 <TextBlock Text="Doctor Name" Height="25" Width="80" HorizontalAlignment="Left" Margin="10,12,0,0"/>
-                <TextBox x:Name="DoctorTxt" Height="30" Width="200" Margin="76,18,16,12"/>
+                <TextBox x:Name="DoctorTxt" Height="25" Width="175" Margin="50,18,16,12"/>
+                <Button x:Name="AddDoctorButton" Click="AddDoctorClickHandler" Height="22" Width="35" Content="ADD"
+                        HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center"/>
             </Grid>
             <Grid Grid.Row="2" Style="{StaticResource TestVisibilityStyle}">
                 <TextBlock Text="Price" Height="25" Width="50" Margin="21,23,221,12"/>

@@ -1,2 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Hospital xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0" />
+<ArrayOfHospital xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Hospital ID="1">
+    <Name>Rao Hospital</Name>
+    <Doctors ID="1">
+      <HospitalId>1</HospitalId>
+      <Name>Dr. Asha R Rao</Name>
+    </Doctors>
+    <Doctors ID="2">
+      <HospitalId>1</HospitalId>
+      <Name>Dr.Dhamodar Rao</Name>
+    </Doctors>
+    <Doctors ID="3">
+      <HospitalId>1</HospitalId>
+      <Name>Dr. G Khamrunnissa</Name>
+    </Doctors>
+    <Doctors ID="4">
+      <HospitalId>1</HospitalId>
+      <Name>Dr. Padmashri</Name>
+    </Doctors>
+    <Doctors ID="5">
+      <HospitalId>1</HospitalId>
+      <Name>Dr.Praerna</Name>
+    </Doctors>
+  </Hospital>
+  <Hospital ID="2">
+    <Name>Shree Saran Medical Centre</Name>
+    <Doctors ID="1">
+      <HospitalId>2</HospitalId>
+      <Name>Dr.Palaniswamy</Name>
+    </Doctors>
+    <Doctors ID="2">
+      <HospitalId>2</HospitalId>
+      <Name>Dr. Manimegalai Palaniswamy</Name>
+    </Doctors>
+  </Hospital>
+</ArrayOfHospital>

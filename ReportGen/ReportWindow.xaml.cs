@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace ReportGen
 {
@@ -14,13 +15,14 @@ namespace ReportGen
     public partial class ReportWindow : Window
     {
         Report reportProp = new Report();
-        
+
         Test test = new Test();
         ObservableCollection<Report> reportCollection = new ObservableCollection<Report>();
         ObservableCollection<Doctor> doctors = new ObservableCollection<Doctor>();
-        ObservableCollection<Hospital> hospitals = new ObservableCollection<Hospital>();
+        //ObservableCollection<Hospital> hospitals = new ObservableCollection<Hospital>();
         ObservableCollection<Test> tests = new ObservableCollection<Test>();
         ObservableCollection<Report> Reports = new ObservableCollection<Report>();
+
         private bool? result;
         public ReportWindow()
         {
@@ -93,43 +95,57 @@ namespace ReportGen
             if (reportProp != null && reportProp.Date != ReportDate.SelectedDate)
                 reportProp.Date = ReportDate.SelectedDate;
         }
-
+        AddWindow window = null;
+        Doctor doc = null;
         private void AddHospitalClickHandler(object sender, RoutedEventArgs e)
         {
             //if (reportProp != null && Hospitals != null)
             //{
-                Hospital hosp = new Hospital();
-                Doctor doc = new Doctor();
-                //var hospital = new HospitalName();
-                var window = new AddWindow();
-                window.SetHospitalVisibility = true;
-                result = window.ShowDialog();
-                if (result == false)
-                    return;
+            if (Hospitals == null)
+                Hospitals = new ObservableCollection<Hospital>();
+            Hospital hosp = new Hospital();
+            doc = new Doctor();
+            //var hospital = new HospitalName();
+            window = new AddWindow();
+            window.SetHospitalVisibility = true;
+            //window.SomethingHappened += FillDoctorsValues();
 
+            result = window.ShowDialog();
+            if (result == false)
+                return;
+
+            if (Hospitals != null)
+            {
                 if (Hospitals.Count > 0)
                     hosp.Id = Hospitals.Count + 1;
                 else
                     hosp.Id = 1;
-                hosp.Name = window.NameTxt.Text;
+            }
+            hosp.Name = window.NameTxt.Text;
+            if (window.doctors != null && window.doctors.Count != 0)
+            {
+                hosp.Doctors = window.doctors;
+                hosp.Doctors.ToList().ForEach(c => c.ParentId = hosp.Id);
+            }
+            //hosp.Doctors.Add();
 
-                //hosp.Doctors.Add();
+            /* if (Hospitals.Count == 0)
+             {
+                 /*reportProp.HospitalProperty.Id = 1;
+                 reportProp.HospitalProperty.Name = window.NameTxt.Text;                
 
-                if (Hospitals.Count == 0)
-                {
-                    /*reportProp.HospitalProperty.Id = 1;
-                    reportProp.HospitalProperty.Name = window.NameTxt.Text;*/
-                    
-                }
-                Hospitals.Add(reportProp.HospitalProperty);
-                //IsolatedStorageFile.GetStore(IsolatedStorageScope.User |IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
+             } */
 
-                XmlSerializer serializerHospital = new XmlSerializer(typeof(ObservableCollection<Hospital>));
-                using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml"))
-                {
-                    serializerHospital.Serialize(writer, Hospitals);
+            Hospitals.Add(hosp);
+            //Hospitals.Add(reportProp.HospitalProperty);
+            //IsolatedStorageFile.GetStore(IsolatedStorageScope.User |IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
-                }
+            XmlSerializer serializerHospital = new XmlSerializer(typeof(ObservableCollection<Hospital>));
+            using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml"))
+            {
+                serializerHospital.Serialize(writer, Hospitals);
+
+            }
             //}
 
         }
@@ -139,7 +155,7 @@ namespace ReportGen
             if (reportProp != null && Doctors != null)
             {
                 //var doctor = new DoctorName();
-                var window = new AddWindow();                
+                window = new AddWindow();
                 result = window.ShowDialog();
                 if (result == false)
                     return;
@@ -165,7 +181,7 @@ namespace ReportGen
             if (reportProp != null && Tests != null)
             {
                 //var test = new TestName();
-                var window = new AddWindow();
+                window = new AddWindow();
                 window.SetTestVisibility = true;
                 result = window.ShowDialog();
                 if (result == false)
