@@ -18,12 +18,26 @@ namespace ReportGen
 
         Test test = new Test();
         ObservableCollection<Report> reportCollection = new ObservableCollection<Report>();
-        ObservableCollection<Doctor> doctors = new ObservableCollection<Doctor>();
+        //ObservableCollection<Doctor> doctors = new ObservableCollection<Doctor>();
         //ObservableCollection<Hospital> hospitals = new ObservableCollection<Hospital>();
-        ObservableCollection<Test> tests = new ObservableCollection<Test>();
+        //ObservableCollection<Test> tests = new ObservableCollection<Test>();
         ObservableCollection<Report> Reports = new ObservableCollection<Report>();
 
         private bool? result;
+
+        public double TestPrice
+        {
+            get { return (double)this.GetValue(TestPriceProperty); }
+            set
+            {
+                SetValue(TestPriceProperty, value);
+            }
+        }
+
+        private static readonly DependencyProperty TestPriceProperty = DependencyProperty.Register("TestPrice",
+                                                                                                   typeof(double),
+                                                                                                   typeof(ReportWindow));
+
         public ReportWindow()
         {
             InitializeComponent();
@@ -32,9 +46,24 @@ namespace ReportGen
             this.DataContext = this;
         }
 
-        private async void FillTestCombo()
+        /// <summary>
+        /// Async method to get the Tests Collection
+        /// </summary>
+        /// <returns>ObservableCollection of test types</returns>
+        private async Task FillTestCombo()
         {
+            Hospitals = await Task.Run(() => GetHospitalList());
             Tests = await Task.Run(() => GetTestList());
+        }
+
+        private ObservableCollection<Hospital> GetHospitalList()
+        {
+            XmlSerializer deSerializer = new XmlSerializer(typeof(ObservableCollection<Hospital>));
+            TextReader reader = new StreamReader(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml");
+            object obj = deSerializer.Deserialize(reader);
+            ObservableCollection<Hospital> hospitalList = (ObservableCollection<Hospital>)obj;
+            reader.Close();
+            return hospitalList;
         }
 
         private ObservableCollection<Test> GetTestList()
@@ -59,7 +88,9 @@ namespace ReportGen
             }
         }
 
-        private static readonly DependencyProperty HospitalsProperty = DependencyProperty.Register("Hospitals", typeof(ObservableCollection<Hospital>), typeof(ReportWindow));
+        private static readonly DependencyProperty HospitalsProperty = DependencyProperty.Register("Hospitals",
+                                                                                                    typeof(ObservableCollection<Hospital>),
+                                                                                                    typeof(ReportWindow));
 
         public ObservableCollection<Doctor> Doctors
         {
@@ -73,7 +104,9 @@ namespace ReportGen
             }
         }
 
-        private static readonly DependencyProperty DoctorsProperty = DependencyProperty.Register("Doctors", typeof(ObservableCollection<Doctor>), typeof(ReportWindow));
+        private static readonly DependencyProperty DoctorsProperty = DependencyProperty.Register("Doctors",
+                                                                                                    typeof(ObservableCollection<Doctor>),
+                                                                                                    typeof(ReportWindow));
 
         [XmlElement("Tests")]
         public ObservableCollection<Test> Tests
@@ -88,7 +121,9 @@ namespace ReportGen
             }
         }
 
-        public static readonly DependencyProperty TestsProperty = DependencyProperty.Register("Tests", typeof(ObservableCollection<Test>), typeof(ReportWindow));
+        public static readonly DependencyProperty TestsProperty = DependencyProperty.Register("Tests",
+                                                                                                typeof(ObservableCollection<Test>),
+                                                                                                typeof(ReportWindow));
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -152,28 +187,28 @@ namespace ReportGen
 
         private void AddDoctorClickHandler(object sender, RoutedEventArgs e)
         {
-            if (reportProp != null && Doctors != null)
-            {
-                //var doctor = new DoctorName();
-                window = new AddWindow();
-                result = window.ShowDialog();
-                if (result == false)
-                    return;
-                if (reportProp.DoctorProperty != null)
-                {
-                    reportProp.DoctorProperty.Id = 1;
-                    reportProp.DoctorProperty.Name = window.NameTxt.Text;
-                }
-                Doctors.Add(reportProp.DoctorProperty);
-                if (Hospitals != null && Hospitals.Count > 0)
-                    reportProp.HospitalProperty.Doctors = Doctors;
+            /* if (reportProp != null && Doctors != null)
+             {
+                 //var doctor = new DoctorName();
+                 window = new AddWindow();
+                 result = window.ShowDialog();
+                 if (result == false)
+                     return;
+                 if (reportProp.DoctorProperty != null)
+                 {
+                     reportProp.DoctorProperty.Id = 1;
+                     reportProp.DoctorProperty.Name = window.NameTxt.Text;
+                 }
+                 Doctors.Add(reportProp.DoctorProperty);
+                 if (Hospitals != null && Hospitals.Count > 0)
+                     reportProp.HospitalProperty.Doctors = Doctors;
 
-                XmlSerializer serializerDoctor = new XmlSerializer(typeof(ObservableCollection<Doctor>));
-                using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\DoctorList.xml"))
-                {
-                    serializerDoctor.Serialize(writer, Doctors);
-                }
-            }
+                 XmlSerializer serializerDoctor = new XmlSerializer(typeof(ObservableCollection<Doctor>));
+                 using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\DoctorList.xml"))
+                 {
+                     serializerDoctor.Serialize(writer, Doctors);
+                 }
+             }*/
         }
 
         private void AddTestClickHandler(object sender, RoutedEventArgs e)

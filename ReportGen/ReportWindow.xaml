@@ -31,8 +31,11 @@
             <TextBlock Margin="50,10" Height="25" Width="110" Text="Hospital" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <ComboBox  Name="HospitalCombo" HorizontalAlignment="Center" Height="25" Width="110" 
                        ItemsSource="{Binding Hospitals}"
+                       SelectedValuePath="Doctors"
+                       SelectedValue="{Binding Doctors}"
                        DisplayMemberPath="Name"
                        IsSynchronizedWithCurrentItem="True"
+                       SelectedIndex="0"
                        VerticalAlignment="Center"                       
                        SelectionChanged="HospitalCombo_SelectionChanged"/>
             <Button Margin="100,10" Width="60" Content="ADD" Click="AddHospitalClickHandler" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -43,18 +46,20 @@
                       ItemsSource="{Binding Doctors}"  
                       DisplayMemberPath="Name"
                       IsSynchronizedWithCurrentItem="True"
+                      SelectedIndex="0"
                       SelectionChanged="DoctorsCombo_SelectionChanged"
                       Height="25" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button Margin="100,10" Width="60" Content="ADD" Click="AddDoctorClickHandler" HorizontalAlignment="Right" VerticalAlignment="Center"/>            
+            <!--<Button Margin="100,10" Width="60" Content="ADD" Click="AddDoctorClickHandler" HorizontalAlignment="Right" VerticalAlignment="Center"/>-->            
         </Grid>
         <Grid Grid.Row="3">
             <TextBlock Margin="50,10" Height="25" Width="110" Text="Test" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <ComboBox Name="TestCombo" 
                       SelectedIndex="0"
-                      ItemsSource="{Binding Tests}"
-                      diagnostics:PresentationTraceSources.TraceLevel="High"
+                      ItemsSource="{Binding Tests}"                      
                       DisplayMemberPath="Name"
                       IsSynchronizedWithCurrentItem="True"
+                      SelectedValuePath="Price"
+                      SelectedValue="{Binding TestPrice}"
                       SelectionChanged="TestCombo_SelectionChanged"
                       Height="25" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Margin="100,10" Width="60" Content="ADD" Click="AddTestClickHandler" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -65,7 +70,7 @@
         </Grid>
         <Grid Grid.Row="5">
             <TextBlock Margin="50,10" Height="25" Width="110" Text="Price" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding Price, Mode=TwoWay}" Height="25" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding TestPrice,StringFormat=\{0:n4\}, Mode=TwoWay}" Height="25" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <Grid Grid.Row="6">
             <TextBlock Margin="50,10" Height="25" Width="110" Text="Discount" HorizontalAlignment="Left" VerticalAlignment="Center"/>
