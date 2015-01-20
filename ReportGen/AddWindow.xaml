@@ -5,7 +5,7 @@
         Title="AddWindow" Height="220" Width="350">
     <Window.Resources>
         <Style x:Key="HospitalVisibilityStyle" TargetType="{x:Type Grid}">
-            <Setter Property="Visibility" Value="Visible"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SetHospitalVisibility}" Value="True">
                     <Setter Property="Visibility" Value="Visible"/>
@@ -41,7 +41,7 @@
             </Grid>
             <Grid Grid.Row="2" Style="{StaticResource TestVisibilityStyle}">
                 <TextBlock Text="Price" Height="25" Width="50" Margin="21,23,221,12"/>
-                <TextBox x:Name="PriceTxt" Height="30" Width="200" Margin="76,18,16,12"/>
+                <TextBox x:Name="PriceTxt" Height="30" Width="175" Margin="76,18,16,12"/>
             </Grid>
             
             <StackPanel Grid.Row="3" Orientation="Horizontal" >

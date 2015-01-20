@@ -1,35 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReportGen
 {
     public class Report : INotifyPropertyChanged
     {
         #region Variables
-        private DateTime? date;
-       /* private ObservableCollection<Hospital> hospitals;
-        private ObservableCollection<Doctor> doctors;
-        private ObservableCollection<Test> tests;*/
-       /* private string doctor;
+        private string date;
+        /* private ObservableCollection<Hospital> hospitals;
+         private ObservableCollection<Doctor> doctors;
+         private ObservableCollection<Test> tests;*/
+        private string doctor;
         private string hospital;
-        private string test;*/
-        private Test testProperty=new Test();
+        private string test;
+       /* private Test testProperty = new Test();
         private Hospital hospitalProperty = new Hospital();
-        private Doctor doctorProperty =new Doctor();
+        private Doctor doctorProperty = new Doctor();*/
         private int quantity;
-        //private double price;
+        private double price;
         private double? discount;
         private double? total;
 
         #endregion
 
         #region Properties
-        public DateTime? Date
+
+        public string Date
         {
             get { return date; }
             set
@@ -39,53 +35,29 @@ namespace ReportGen
             }
         }
 
-       /* public ObservableCollection<Hospital> Hospitals
-        {
-            get { return hospitals; }
-            set
-            {
-                hospitals = value;
-                RaisePropertyChanged("Hospitals");
-            }
-        }
-
-        public ObservableCollection<Doctor> Doctors
-        {
-            get { return doctors; }
-            set
-            {
-                doctors = value;
-                RaisePropertyChanged("Doctors");
-            }
-        }
-
-        public ObservableCollection<Test> Tests
-        {
-            get { return tests; }
-            set
-            {
-                tests = value;
-                RaisePropertyChanged("Tests");
-            }
-        }*/
-
-       /* public string Doctor
-        {
-            get { return doctor; }
-            set
-            {
-                doctor = value;
-                RaisePropertyChanged("Doctor");
-            }
-        }
-
         public string Hospital
         {
             get { return hospital; }
             set
             {
-                hospital = value;
-                RaisePropertyChanged("Hospital");
+                if (value != hospital)
+                {
+                    hospital = value;
+                    RaisePropertyChanged("Hospital");
+                }
+            }
+        }
+
+        public string Doctor
+        {
+            get { return doctor; }
+            set
+            {
+                if (value != doctor)
+                {
+                    doctor = value;
+                    RaisePropertyChanged("Doctor");
+                }
             }
         }
 
@@ -94,11 +66,15 @@ namespace ReportGen
             get { return test; }
             set
             {
-                test = value;
-                RaisePropertyChanged("Test");
+                if (value != test)
+                {
+                    test = value;
+                    RaisePropertyChanged("Test");
+                }
             }
-        }*/
-        public Doctor DoctorProperty
+
+        }
+      /*  public Doctor DoctorProperty
         {
             get { return doctorProperty; }
             set
@@ -126,8 +102,7 @@ namespace ReportGen
                 testProperty = value;
                 RaisePropertyChanged("TestProperty");
             }
-        }
-
+        }*/
 
         public int Quantity
         {
@@ -138,8 +113,8 @@ namespace ReportGen
                 RaisePropertyChanged("Quantity");
             }
         }
-
-       /* public double Price
+        
+        public double Price
         {
             get { return price; }
             set
@@ -147,7 +122,7 @@ namespace ReportGen
                 price = value;
                 RaisePropertyChanged("Price");
             }
-        }*/
+        }
 
         public double? Discount
         {
@@ -190,6 +165,6 @@ namespace ReportGen
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        #endregion
+        #endregion       
     }
 }
