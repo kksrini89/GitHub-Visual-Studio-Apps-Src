@@ -498,10 +498,13 @@ namespace ReportGen
         }
         private void GenerateClickHandler(object sender, RoutedEventArgs e)
         {
-            ExportToExcel<Report, Reports> s = new ExportToExcel<Report, Reports>();
-            ICollectionView view = CollectionViewSource.GetDefaultView(ReportDataGrid.ItemsSource);
-            s.dataToPrint = (Reports)view.SourceCollection;
-            s.GenerateReport();
+            string filePath = AppDomain.CurrentDomain.BaseDirectory;
+            var exportToExcel = new EPPlusExportToExcel(filePath, ReportCollection);
+            //ICollectionView view = CollectionViewSource.GetDefaultView(ReportDataGrid.ItemsSource);
+            string excelPath = exportToExcel.ExportToExcel();
+            /* s.dataToPrint = (Reports)view.SourceCollection;
+            s.GenerateReport();*/
+
         }
 
         #endregion
