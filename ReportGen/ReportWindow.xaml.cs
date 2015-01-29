@@ -502,6 +502,9 @@ namespace ReportGen
             var exportToExcel = new EPPlusExportToExcel(filePath, ReportCollection);
             //ICollectionView view = CollectionViewSource.GetDefaultView(ReportDataGrid.ItemsSource);
             string excelPath = exportToExcel.ExportToExcel();
+
+            MessageBox.Show(excelPath + "is generated " + "in " + filePath, "Success", MessageBoxButton.OK);
+
             /* s.dataToPrint = (Reports)view.SourceCollection;
             s.GenerateReport();*/
 
