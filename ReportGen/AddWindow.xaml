@@ -30,7 +30,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid>
-                <TextBlock Text="Name" Height="25" Width="50" Margin="21,23,221,12"/>
+                <TextBlock Text="Name" HorizontalAlignment="Left" Height="25" Width="50" Margin="21,23,221,12"/>
                 <TextBox x:Name="NameTxt" Height="25" Width="175" Margin="50,18,16,12"/>
             </Grid>
             <Grid Grid.Row="1" Style="{StaticResource HospitalVisibilityStyle}">
@@ -40,10 +40,10 @@
                         HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center"/>
             </Grid>
             <Grid Grid.Row="2" Style="{StaticResource TestVisibilityStyle}">
-                <TextBlock Text="Price" Height="25" Width="50" Margin="21,23,221,12"/>
-                <TextBox x:Name="PriceTxt" Height="30" Width="175" Margin="76,18,16,12"/>
+                <TextBlock Text="Price" HorizontalAlignment="Left" Height="25" Width="50" Margin="21,23,221,12"/>
+                <TextBox x:Name="PriceTxt" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="176" Margin="50,18,16,12"/>
             </Grid>
-            
+
             <StackPanel Grid.Row="3" Orientation="Horizontal" >
                 <Button Margin="40,10" Height="25" Width="70" Content="OK" Click="OkClickHandler" IsDefault="True"/>
                 <Button Height="25" Width="70" Content="CANCEL" Click="CancelClickHandler" IsCancel="False" Margin="25,15"/>

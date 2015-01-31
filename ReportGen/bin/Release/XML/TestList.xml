@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
+  <Test ID="1">
+    <Name>LBC</Name>
+    <Price>1000</Price>
+  </Test>
+  <Test ID="2">
+    <Name>Double Marker</Name>
+    <Price>1645</Price>
+  </Test>
+</ArrayOfTest>

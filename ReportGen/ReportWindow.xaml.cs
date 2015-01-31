@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace ReportGen
@@ -18,6 +17,9 @@ namespace ReportGen
     public partial class ReportWindow : Window, INotifyPropertyChanged, INotifyDataErrorInfo
     {
         #region fields
+
+        private string hospitalFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\\XML\\HospitalList.xml";//@"../../XML/HospitalList.xml";
+        private string testFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\\XML\\TestList.xml";//@"../../XML/TestList.xml";
 
         private bool? result;
         Report reportProp = null;
@@ -150,7 +152,7 @@ namespace ReportGen
                 {
                     quantityNumber = value;
                     RaisePropertyChanged("QuantityNumber");
-                    if (quantityNumber.Value > 1)
+                    if (quantityNumber.Value > 0)
                         TotalValue = CalculateTotal(TestPrice.Value, quantityNumber.Value);
                 }
             }
@@ -169,7 +171,7 @@ namespace ReportGen
                 {
                     discountValue = value;
                     RaisePropertyChanged("DiscountValue");
-                    if (discountValue.Value > 1.0)
+                    if (discountValue.Value > 0.0)
                         TotalValue = CalculateTotal(TestPrice.Value, QuantityNumber.Value, discountValue.Value);
                 }
             }
@@ -188,6 +190,8 @@ namespace ReportGen
                 {
                     testPrice = value;
                     RaisePropertyChanged("TestPrice");
+                    if (TestPrice.Value > 1)
+                        TotalValue = CalculateTotal(TestPrice.Value);
                 }
             }
         }
@@ -289,8 +293,8 @@ namespace ReportGen
             InitializeComponent();
             //Tests = GetTestList();
             FillCombo();
-            QuantityNumber = 1;
-            DiscountValue = 1.0;
+            QuantityNumber = 0;
+            DiscountValue = 0.0;
             this.DataContext = this;
         }
         #endregion
@@ -308,27 +312,37 @@ namespace ReportGen
 
         private ObservableCollection<Hospital> GetHospitalList()
         {
+            ObservableCollection<Hospital> hospitalList = null;
             XmlSerializer deSerializer = new XmlSerializer(typeof(ObservableCollection<Hospital>));
-            TextReader reader = new StreamReader(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml");
-            object obj = deSerializer.Deserialize(reader);
-            ObservableCollection<Hospital> hospitalList = (ObservableCollection<Hospital>)obj;
-            reader.Close();
+            if (File.Exists(hospitalFilePath))
+            {
+                TextReader reader = new StreamReader(hospitalFilePath);//new StreamReader(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml");
+                object obj = deSerializer.Deserialize(reader);
+                hospitalList = (ObservableCollection<Hospital>)obj;
+                reader.Close();
+            }
             return hospitalList;
         }
 
         private ObservableCollection<Test> GetTestList()
         {
+            ObservableCollection<Test> testList = null;
             XmlSerializer deSerializer = new XmlSerializer(typeof(ObservableCollection<Test>));
-            TextReader reader = new StreamReader(@"D:\Karthick - App\ReportGen\ReportGen\XML\TestList.xml");
-            object obj = deSerializer.Deserialize(reader);
-            ObservableCollection<Test> testList = (ObservableCollection<Test>)obj;
-            reader.Close();
+            if (File.Exists(testFilePath))
+            {
+                TextReader reader = new StreamReader(testFilePath);//new StreamReader(@"D:\Karthick - App\ReportGen\ReportGen\XML\TestList.xml");
+                object obj = deSerializer.Deserialize(reader);
+                testList = (ObservableCollection<Test>)obj;
+                reader.Close();
+            }
             return testList;
         }
 
-        private double CalculateTotal(double Price, int Quantity = 1, double Discount = 1.0)
+        private double CalculateTotal(double Price, int Quantity = 0, double Discount = 0.0)
         {
-            return (Quantity * (Price * (Discount / 100)));
+            //return (Quantity * (Price - (Price * (Discount / 100))));            
+            var netPrice = Price * (1 - Discount / 100);
+            return (Quantity * netPrice);
         }
 
         #endregion
@@ -386,10 +400,13 @@ namespace ReportGen
             //IsolatedStorageFile.GetStore(IsolatedStorageScope.User |IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             XmlSerializer serializerHospital = new XmlSerializer(typeof(ObservableCollection<Hospital>));
-            using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml"))
+            bool isFilePresent = File.Exists(hospitalFilePath);
+            if (isFilePresent)
             {
-                serializerHospital.Serialize(writer, Hospitals);
-
+                using (TextWriter writer = new StreamWriter(hospitalFilePath))  //new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\HospitalList.xml"))
+                {
+                    serializerHospital.Serialize(writer, Hospitals);
+                }
             }
             //}
 
@@ -423,6 +440,7 @@ namespace ReportGen
 
         private void AddTestClickHandler(object sender, RoutedEventArgs e)
         {
+            string val = testFilePath;
             if (Tests == null)
                 Tests = new ObservableCollection<Test>();
             test = new Test();
@@ -468,9 +486,13 @@ namespace ReportGen
             Tests.Add(test);
 
             XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<Test>));
-            using (TextWriter writer = new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\TestList.xml"))
+            bool isFilePresent = File.Exists(testFilePath);
+            if (isFilePresent)
             {
-                serializer.Serialize(writer, Tests);
+                using (TextWriter writer = new StreamWriter(testFilePath))//new StreamWriter(@"D:\Karthick - App\ReportGen\ReportGen\XML\TestList.xml"))
+                {
+                    serializer.Serialize(writer, Tests);
+                }
             }
         }
 
@@ -493,21 +515,22 @@ namespace ReportGen
                 reportProp.Total = TotalValue;
             }
             ReportCollection.Add(reportProp);
-            QuantityNumber = 1;
-            DiscountValue = 1.0;
+            QuantityNumber = 0;
+            DiscountValue = 0.0;
+            TotalValue = 0.0;
         }
         private void GenerateClickHandler(object sender, RoutedEventArgs e)
         {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory;
+            //string filePath = AppDomain.CurrentDomain.BaseDirectory;
+            //string filePath = System.Windows.Forms.Application.StartupPath;
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var exportToExcel = new EPPlusExportToExcel(filePath, ReportCollection);
             //ICollectionView view = CollectionViewSource.GetDefaultView(ReportDataGrid.ItemsSource);
             string excelPath = exportToExcel.ExportToExcel();
-
-            MessageBox.Show(excelPath + "is generated " + "in " + filePath, "Success", MessageBoxButton.OK);
+            System.Windows.MessageBox.Show("Find the file in " + filePath, "Success", MessageBoxButton.OK);
 
             /* s.dataToPrint = (Reports)view.SourceCollection;
             s.GenerateReport();*/
-
         }
 
         #endregion
@@ -606,8 +629,6 @@ namespace ReportGen
         }
 
         #endregion
-
-
     }
 
     public class Reports : ObservableCollection<Report> { }
